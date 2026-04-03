@@ -10,6 +10,7 @@
     --blue: #002147;
     --gold: #F39200;
     --bg: #f4f7f9;
+    --red: #ef4444;
 }
 
 body {
@@ -44,13 +45,14 @@ body {
 .inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 15px;
 }
 
 .inputs input {
-    padding: 15px;
+    padding: 16px;
     font-size: 1rem;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 2px solid #ccc;
 }
 
@@ -66,32 +68,49 @@ body {
 
 /* TIMER */
 .timer {
-    font-size: 2rem;
+    font-size: 2.2rem;
     text-align: center;
-    color: red;
+    color: var(--red);
     margin: 15px 0;
+    font-weight: bold;
 }
 
 /* BUTTONS */
 button {
     padding: 15px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 10px;
+    width: 100%;
+    font-size: 1rem;
 }
 
 .start { background: var(--blue); color: white; }
+.stop { background: var(--red); color: white; }
 .send { background: var(--gold); color: white; }
-.retry { background: red; color: white; }
+.retry { background: #64748b; color: white; }
+
+/* AUDIO */
+audio {
+    margin-top: 10px;
+}
+
+/* STATUS */
+#status {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}
 
 /* SUCCESS */
 .success {
     display: none;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: green;
+    margin-top: 15px;
 }
 </style>
 </head>
@@ -99,7 +118,7 @@ button {
 <body>
 <div class="container">
 
-<div class="card" id="app">
+<div class="card">
 
 <div class="header">ORAL TASK I</div>
 
@@ -116,11 +135,15 @@ button {
 
 <div class="timer" id="timer">00:00</div>
 
-<button class="start" onclick="startRecording()">🎙️ Start</button>
+<button id="startBtn" class="start" onclick="startRecording()">🎙️ Start Recording</button>
 
-<audio id="audio" controls style="width:100%; margin-top:10px;"></audio>
+<button id="stopBtn" class="stop" onclick="stopRecording()" style="display:none;">
+⏹️ Stop Recording
+</button>
 
-<button class="send" onclick="upload()">Send</button>
+<audio id="audio" controls style="width:100%;"></audio>
+
+<button class="send" onclick="upload()">Send to Teacher</button>
 <button class="retry" onclick="location.reload()">Reset</button>
 
 <div id="status"></div>
@@ -130,8 +153,8 @@ button {
 </div>
 
 <script>
-const SCRIPT_URL = "TU_SCRIPT_URL";
-const MAX_TIME = 60;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyowky-5tJ-rRVRdlZ-0FGWmg6pnJPxea8n9bQcoOjCSqQlnsYJyCBaDJQwR_BZ_-E/exec";
+const MAX_TIME = 120;
 
 let mediaRecorder, chunks = [], seconds = 0, timerInterval;
 let audioBlob, listened = false;
@@ -162,7 +185,13 @@ async function startRecording() {
         audio.src = URL.createObjectURL(audioBlob);
     };
 
+    document.getElementById("startBtn").style.display = "none";
+    document.getElementById("stopBtn").style.display = "block";
+
+    seconds = 0;
+
     timerInterval = setInterval(() => {
+
         seconds++;
 
         let m = String(Math.floor(seconds/60)).padStart(2,'0');
@@ -176,11 +205,22 @@ async function startRecording() {
 }
 
 function stopRecording() {
-    mediaRecorder.stop();
+
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+
     clearInterval(timerInterval);
+
+    document.getElementById("stopBtn").style.display = "none";
 }
 
 function upload() {
+
+    if (!audioBlob) {
+        alert("Record first!");
+        return;
+    }
 
     if (!listened) {
         alert("Listen your audio first");
@@ -206,10 +246,11 @@ function upload() {
             })
         });
 
-        document.getElementById("status").innerText = "Sending...";
-        
+        document.getElementById("status").innerText = "⏳ Sending...";
+
         setTimeout(() => {
             document.getElementById("success").style.display = "block";
+            document.getElementById("status").innerText = "";
             seconds = 0;
             timer.textContent = "00:00";
         }, 2000);
