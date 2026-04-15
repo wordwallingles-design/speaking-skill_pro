@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speaking Assessment - Colegio San Ignacio</title>
     <style>
-        /* CSS3 - Modern Minimalist Design */
         :root {
             --primary-dark: #1a2a3a;
             --oxford-blue: #002147;
@@ -142,7 +141,6 @@
         .btn-submit { background: var(--accent-blue); color: white; }
         button:disabled { background: #ccc !important; cursor: not-allowed; opacity: 0.6; }
 
-        /* Audio Player Styling */
         audio {
             width: 100%;
             max-width: 300px;
@@ -258,7 +256,7 @@
                         this.seconds = 0;
                         this.btnRecord.textContent = "STOP";
                         this.btnSubmit.disabled = true;
-                        this.audioPlayer.src = ""; // Clear player while recording
+                        this.audioPlayer.src = "";
                         this.statusEl.className = "indicator recording";
                         this.statusEl.textContent = "Recording...";
                         this.timerInterval = setInterval(() => {
@@ -273,11 +271,7 @@
                     this.mediaRecorder.onstop = () => {
                         clearInterval(this.timerInterval);
                         this.audioBlob = new Blob(this.chunks, { type: 'audio/webm' });
-                        
-                        // Set the audio player source to the new recording
-                        const audioURL = window.URL.createObjectURL(this.audioBlob);
-                        this.audioPlayer.src = audioURL;
-
+                        this.audioPlayer.src = window.URL.createObjectURL(this.audioBlob);
                         this.btnRecord.textContent = "RECORD NEW";
                         this.btnSubmit.disabled = false;
                         this.statusEl.className = "indicator stopped";
@@ -287,7 +281,7 @@
 
                     this.mediaRecorder.start();
                 } catch (err) {
-                    alert("Mic access denied or error starting recording.");
+                    alert("Please allow microphone access to proceed.");
                 }
             }
 
@@ -315,15 +309,19 @@
                     };
 
                     try {
+                        // Sending as text/plain avoids CORS preflight issues with Google Apps Script
                         await fetch(SCRIPT_URL, {
                             method: "POST",
-                            mode: "no-cors", 
-                            body: JSON.stringify(payload)
+                            body: JSON.stringify(payload),
+                            headers: {
+                                "Content-Type": "text/plain;charset=utf-8"
+                            }
                         });
-                        alert("Submission sent successfully!");
+                        alert("Submission successful! File saved to Drive.");
                         this.btnSubmit.textContent = "SENT";
                     } catch (e) {
-                        alert("Upload error. Please try again.");
+                        console.error(e);
+                        alert("Error sending to server. Please check your internet connection.");
                         this.btnSubmit.disabled = false;
                         this.btnSubmit.textContent = "SUBMIT";
                     }
