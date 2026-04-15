@@ -1,262 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ORAL TASK I</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaking Assessment - Colegio San Ignacio</title>
+    <style>
+        /* CSS3 - Modern Minimalist Design */
+        :root {
+            --primary-dark: #1a2a3a;
+            --oxford-blue: #002147;
+            --accent-blue: #3498db;
+            --record-red: #e74c3c;
+            --pause-yellow: #f1c40f;
+            --play-green: #2ecc71;
+            --bg-gray: #f4f7f6;
+            --white: #ffffff;
+            --text-main: #2c3e50;
+        }
 
-<style>
-:root {
-    --blue: #002147;
-    --gold: #F39200;
-    --bg: #f4f7f9;
-    --red: #ef4444;
-}
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-body {
-    font-family: Arial;
-    background: var(--bg);
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-}
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
 
-.container { max-width: 750px; width: 100%; }
+        .oxford-box {
+            background-color: var(--oxford-blue);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .oxford-box h3 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
+        }
 
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
+        .section {
+            margin-bottom: 50px;
+            padding: 25px;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
 
-/* HEADER */
-.header {
-    background: var(--blue);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .section:hover { border-color: var(--accent-blue); }
 
-/* INPUTS */
-.inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 15px;
-}
+        h2 { color: var(--primary-dark); font-size: 1.4rem; border-left: 4px solid var(--accent-blue); padding-left: 15px; }
 
-.inputs input {
-    padding: 16px;
-    font-size: 1rem;
-    border-radius: 12px;
-    border: 2px solid #ccc;
-}
+        .instruction-text {
+            display: block;
+            margin: 15px 0;
+            font-weight: 600;
+            color: #555;
+            background: #eef2f3;
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-.full { grid-column: span 2; }
+        .media-wrapper {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-/* IMAGES */
-.images iframe {
-    width: 100%;
-    height: 220px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-}
+        .media-wrapper iframe {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+        }
 
-/* TIMER */
-.timer {
-    font-size: 2.2rem;
-    text-align: center;
-    color: var(--red);
-    margin: 15px 0;
-    font-weight: bold;
-}
+        .question-card {
+            font-size: 1.2rem;
+            font-style: italic;
+            background: #fff;
+            border-left: 5px solid var(--play-green);
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-/* BUTTONS */
-button {
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    font-size: 1rem;
-}
+        .recorder-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+        }
 
-.start { background: var(--blue); color: white; }
-.stop { background: var(--red); color: white; }
-.send { background: var(--gold); color: white; }
-.retry { background: #64748b; color: white; }
+        .timer { font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: bold; color: var(--primary-dark); }
+        
+        .indicator {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #ddd;
+        }
 
-/* AUDIO */
-audio {
-    margin-top: 10px;
-}
+        .recording { background: var(--record-red); color: white; animation: blink 1.5s infinite; }
+        .stopped { background: #95a5a6; color: white; }
 
-/* STATUS */
-#status {
-    margin-top: 10px;
-    font-weight: bold;
-    text-align: center;
-}
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
-/* SUCCESS */
-.success {
-    display: none;
-    text-align: center;
-    font-size: 1.3rem;
-    color: green;
-    margin-top: 15px;
-}
-</style>
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 110px;
+        }
+
+        .btn-record { background: var(--record-red); color: white; }
+        .btn-submit { background: var(--accent-blue); color: white; }
+        button:disabled { background: #ccc !important; cursor: not-allowed; opacity: 0.6; }
+
+        /* Audio Player Styling */
+        audio {
+            width: 100%;
+            max-width: 300px;
+            height: 40px;
+            margin-top: 5px;
+        }
+
+        @keyframes blink { 50% { opacity: 0.6; } }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .media-wrapper iframe { height: 200px; }
+        }
+    </style>
 </head>
-
 <body>
-<div class="container">
 
-<div class="card">
+    <div class="container">
+        <div class="oxford-box">
+            <h3>COLEGIO SAN IGNACIO</h3>
+            <p><b>Speaking Skill Assessment - 8th grades</b></p>
+        </div>
 
-<div class="header">COLEGIO SAN IGNACIO ORAL TASK I</div>
+        <div class="section">
+            <h2>Section 1: Image Description</h2>
+            <span class="instruction-text">“Fully describe the 2 images for at least 1 minute”</span>
+            <div class="media-wrapper">
+                <iframe src="https://drive.google.com/file/d/1poiz_D6Zdw5HftyrYEimJkwSsLWz6-OP/preview"></iframe>
+                <iframe src="https://drive.google.com/file/d/1nCXceXIVOP0m2vmfYnzqd3WYqQlPPgxb/preview"></iframe>
+            </div>
+            <div class="recorder-box" id="rec-seccion1">
+                <div class="timer">00:00 / 02:00</div>
+                <div class="indicator stopped">Ready</div>
+                <audio controls class="player"></audio>
+                <div class="controls">
+                    <button class="btn-record">RECORD</button>
+                    <button class="btn-submit" disabled>SUBMIT</button>
+                </div>
+            </div>
+        </div>
 
-<div class="inputs">
-    <input id="firstName" placeholder="First Name">
-    <input id="lastName" placeholder="Last Name">
-    <input id="sClass" class="full" placeholder="Class">
-</div>
+        <div class="section">
+            <h2>Section 2: Opinion (Task 1)</h2>
+            <span class="instruction-text">“Take your time to prepare your answer. Record your answer in 1 minute”</span>
+            <div class="question-card">“Do online games help people make friends in the same way as real life? Give examples”</div>
+            <div class="recorder-box" id="rec-seccion2Q1">
+                <div class="timer">00:00 / 02:00</div>
+                <div class="indicator stopped">Ready</div>
+                <audio controls class="player"></audio>
+                <div class="controls">
+                    <button class="btn-record">RECORD</button>
+                    <button class="btn-submit" disabled>SUBMIT</button>
+                </div>
+            </div>
+        </div>
 
-<div class="images">
-    <iframe src="https://drive.google.com/file/d/1ywbQsGcOJ4wacgMKmZWTdbRwRmrCs7Vx/preview"></iframe>
-    <iframe src="https://drive.google.com/file/d/1HKFcI9k6yBWfxf-Dx-dP5EQg9PL7wX4y/preview"></iframe>
-</div>
+        <div class="section">
+            <h2>Section 2: Opinion (Task 2)</h2>
+            <span class="instruction-text">“Take your time to prepare your answer. Record your answer in one minute”</span>
+            <div class="question-card">"What skills can board games develop among teenagers? Give examples"</div>
+            <div class="recorder-box" id="rec-seccion2Q2">
+                <div class="timer">00:00 / 02:00</div>
+                <div class="indicator stopped">Ready</div>
+                <audio controls class="player"></audio>
+                <div class="controls">
+                    <button class="btn-record">RECORD</button>
+                    <button class="btn-submit" disabled>SUBMIT</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="timer" id="timer">00:00</div>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyowky-5tJ-rRVRdlZ-0FGWmg6pnJPxea8n9bQcoOjCSqQlnsYJyCBaDJQwR_BZ_-E/exec";
+        const MAX_TIME = 120; 
 
-<button id="startBtn" class="start" onclick="startRecording()">🎙️ Start Recording</button>
+        class AssessmentRecorder {
+            constructor(containerId, fileSuffix) {
+                this.container = document.getElementById(containerId);
+                this.suffix = fileSuffix;
+                this.btnRecord = this.container.querySelector('.btn-record');
+                this.btnSubmit = this.container.querySelector('.btn-submit');
+                this.timerEl = this.container.querySelector('.timer');
+                this.statusEl = this.container.querySelector('.indicator');
+                this.audioPlayer = this.container.querySelector('.player');
 
-<button id="stopBtn" class="stop" onclick="stopRecording()" style="display:none;">
-⏹️ Stop Recording
-</button>
+                this.mediaRecorder = null;
+                this.chunks = [];
+                this.seconds = 0;
+                this.timerInterval = null;
+                this.audioBlob = null;
 
-<audio id="audio" controls style="width:100%;"></audio>
+                this.init();
+            }
 
-<button class="send" onclick="upload()">Send to Teacher</button>
-<button class="retry" onclick="location.reload()">Reset</button>
+            init() {
+                this.btnRecord.onclick = () => this.toggleRecording();
+                this.btnSubmit.onclick = () => this.uploadFile();
+            }
 
-<div id="status"></div>
-<div class="success" id="success">Sent successfully ✅</div>
+            async toggleRecording() {
+                if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+                    this.mediaRecorder.stop();
+                    return;
+                }
 
-</div>
-</div>
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    this.chunks = [];
 
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyowky-5tJ-rRVRdlZ-0FGWmg6pnJPxea8n9bQcoOjCSqQlnsYJyCBaDJQwR_BZ_-E/exec";
-const MAX_TIME = 120;
+                    this.mediaRecorder.onstart = () => {
+                        this.seconds = 0;
+                        this.btnRecord.textContent = "STOP";
+                        this.btnSubmit.disabled = true;
+                        this.audioPlayer.src = ""; // Clear player while recording
+                        this.statusEl.className = "indicator recording";
+                        this.statusEl.textContent = "Recording...";
+                        this.timerInterval = setInterval(() => {
+                            this.seconds++;
+                            this.updateTimerDisplay();
+                            if (this.seconds >= MAX_TIME) this.mediaRecorder.stop();
+                        }, 1000);
+                    };
 
-let mediaRecorder, chunks = [], seconds = 0, timerInterval;
-let audioBlob, listened = false;
+                    this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data);
 
-const timer = document.getElementById("timer");
-const audio = document.getElementById("audio");
+                    this.mediaRecorder.onstop = () => {
+                        clearInterval(this.timerInterval);
+                        this.audioBlob = new Blob(this.chunks, { type: 'audio/webm' });
+                        
+                        // Set the audio player source to the new recording
+                        const audioURL = window.URL.createObjectURL(this.audioBlob);
+                        this.audioPlayer.src = audioURL;
 
-audio.onplay = () => listened = true;
+                        this.btnRecord.textContent = "RECORD NEW";
+                        this.btnSubmit.disabled = false;
+                        this.statusEl.className = "indicator stopped";
+                        this.statusEl.textContent = "Recorded";
+                        stream.getTracks().forEach(t => t.stop());
+                    };
 
-async function startRecording() {
+                    this.mediaRecorder.start();
+                } catch (err) {
+                    alert("Mic access denied or error starting recording.");
+                }
+            }
 
-    if (!firstName.value || !lastName.value) {
-        alert("Complete your name");
-        return;
-    }
+            updateTimerDisplay() {
+                const m = Math.floor(this.seconds / 60).toString().padStart(2, '0');
+                const s = (this.seconds % 60).toString().padStart(2, '0');
+                this.timerEl.textContent = `${m}:${s} / 02:00`;
+            }
 
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            async uploadFile() {
+                const name = prompt("Enter Student Full Name:");
+                if (!name) return;
 
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
+                this.btnSubmit.disabled = true;
+                this.btnSubmit.textContent = "Sending...";
 
-    chunks = [];
+                const reader = new FileReader();
+                reader.readAsDataURL(this.audioBlob);
+                reader.onloadend = async () => {
+                    const base64data = reader.result.split(',')[1];
+                    const payload = {
+                        filename: `${name.trim().replace(/\s+/g, '_')}_${this.suffix}.webm`,
+                        mimeType: 'audio/webm',
+                        data: base64data
+                    };
 
-    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                    try {
+                        await fetch(SCRIPT_URL, {
+                            method: "POST",
+                            mode: "no-cors", 
+                            body: JSON.stringify(payload)
+                        });
+                        alert("Submission sent successfully!");
+                        this.btnSubmit.textContent = "SENT";
+                    } catch (e) {
+                        alert("Upload error. Please try again.");
+                        this.btnSubmit.disabled = false;
+                        this.btnSubmit.textContent = "SUBMIT";
+                    }
+                };
+            }
+        }
 
-    mediaRecorder.onstop = () => {
-        audioBlob = new Blob(chunks, { type: 'audio/mp3' });
-        audio.src = URL.createObjectURL(audioBlob);
-    };
-
-    document.getElementById("startBtn").style.display = "none";
-    document.getElementById("stopBtn").style.display = "block";
-
-    seconds = 0;
-
-    timerInterval = setInterval(() => {
-
-        seconds++;
-
-        let m = String(Math.floor(seconds/60)).padStart(2,'0');
-        let s = String(seconds%60).padStart(2,'0');
-
-        timer.textContent = `${m}:${s}`;
-
-        if (seconds >= MAX_TIME) stopRecording();
-
-    }, 1000);
-}
-
-function stopRecording() {
-
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop();
-    }
-
-    clearInterval(timerInterval);
-
-    document.getElementById("stopBtn").style.display = "none";
-}
-
-function upload() {
-
-    if (!audioBlob) {
-        alert("Record first!");
-        return;
-    }
-
-    if (!listened) {
-        alert("Listen your audio first");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(audioBlob);
-
-    reader.onloadend = () => {
-
-        const base64 = reader.result.split(',')[1];
-
-        fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "cors",
-            body: JSON.stringify({
-                base64,
-                filename: `${lastName.value}_${firstName.value}_${sClass.value}.mp3`,
-                name: firstName.value,
-                lastname: lastName.value,
-                class: sClass.value
-            })
+        document.addEventListener('DOMContentLoaded', () => {
+            new AssessmentRecorder('rec-seccion1', 'Section1');
+            new AssessmentRecorder('rec-seccion2Q1', 'Section2_Task1');
+            new AssessmentRecorder('rec-seccion2Q2', 'Section2_Task2');
         });
-
-        document.getElementById("status").innerText = "⏳ Sending...";
-
-        setTimeout(() => {
-            document.getElementById("success").style.display = "block";
-            document.getElementById("status").innerText = "";
-            seconds = 0;
-            timer.textContent = "00:00";
-        }, 2000);
-    };
-}
-</script>
-
+    </script>
 </body>
 </html>
